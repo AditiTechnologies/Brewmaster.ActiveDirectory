@@ -1,5 +1,5 @@
 {
-  "Name": "AD",
+  "Name": "Brewmaster.ActiveDirectory",
   "Description": "Creates an Active Directory deployment.",
   "Version": "0.1.0",
   "Parameters": [
