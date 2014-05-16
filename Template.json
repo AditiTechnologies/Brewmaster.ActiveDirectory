@@ -34,12 +34,6 @@
       "Description": "Name of Azure disk storage account."
     },
     {
-      "Name": "CloudDeploymentId",
-      "Type": "String",
-      "TypeHint": "Guid",
-      "Description": "Id of Azure cloud deployment."
-    },
-    {
       "Name": "VMSize",
       "Type": "String",
       "TypeHint": "AzureRoleSize",
