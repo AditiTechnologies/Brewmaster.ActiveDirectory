@@ -208,7 +208,7 @@
             "ConfigSets": [
               "DomainController"
             ],
-			"DeploymentGroup": ""
+			"DeploymentGroup": "default"
           }
         ],
         "DnsServers": [
