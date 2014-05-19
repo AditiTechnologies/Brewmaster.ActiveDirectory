@@ -1,5 +1,5 @@
 {
-  "Name": "AD",
+  "Name": "ActiveDirectory",
   "Description": "Creates an Active Directory deployment.",
   "Version": "0.1.0",
   "Parameters": [
@@ -32,12 +32,6 @@
       "Type": "String",
       "TypeHint": "AzureStorageName",
       "Description": "Name of Azure disk storage account."
-    },
-    {
-      "Name": "CloudDeploymentId",
-      "Type": "String",
-      "TypeHint": "Guid",
-      "Description": "Id of Azure cloud deployment."
     },
     {
       "Name": "VMSize",
@@ -150,7 +144,7 @@
       "Description": "My AD Service",
       "Deployment": {
         "Name": "03d081ab-b806-45ff-ae8d-3fbce755a6d5",
-        "VirtualNetwork": "dsc-vnet",
+        "VirtualNetwork": "{{VnetName}}",
         "VirtualMachines": [
           {
             "Name": "dc1",
