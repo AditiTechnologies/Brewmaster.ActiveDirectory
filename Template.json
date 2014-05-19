@@ -179,7 +179,7 @@
             "ConfigSets": [
               "RootDomainController"
             ],
-            "DeploymentGroup": "ADGroup"
+            "DeploymentGroup": "Forest"
           },
           {
             "Name": "{{ServerNamePrefix}}2",
@@ -207,8 +207,7 @@
             },
             "ConfigSets": [
               "DomainController"
-            ],
-            "DeploymentGroup": "ADGroup"
+            ]
           }
         ],
         "DnsServers": [
@@ -223,8 +222,8 @@
   ],
   "DeploymentGroups": [
     {
-      "Name": "ADGroup",
-      "Description": "Must fully deploy AD before deploying dependant VMs."
+      "Name": "Forest",
+      "Description": "Must fully deploy root forest before adding additional DCs"
     }
   ],
   "Credentials": [
@@ -330,10 +329,10 @@
       "Name": "SetupADForest",
       "Description": "Configure this server as the first Active Directory domain controller in a new forest. See http://technet.microsoft.com/en-us/library/jj574166.aspx",
       "Resources": [
-        {
+         {
           "Credential": null,
           "GetScript": "return @{Domain = Get-WmiObject Win32_NTDomain}",
-          "SetScript": "\r\nWrite-Verbose \"Creating forest [$DomainNetbiosName ($DomainName)]\"\r\nImport-Module ADDSDeployment -Verbose:$false\r\nInstall-ADDSForest -DomainName $DomainName `\r\n                   -DomainNetbiosName $DomainNetbiosName `\r\n                   -ForestMode 'Win2012' `\r\n                   -DomainMode 'Win2012' `\r\n                   -SafeModeAdministratorPassword (ConvertTo-SecureString $DSRMPassPhrase -AsPlainText -Force) `\r\n                   -InstallDns `\r\n                   -DatabasePath $DatabasePath `\r\n                   -LogPath $LogPath `\r\n                   -SysvolPath $SysvolPath `\r\n                   -Force `\r\n                   -NoRebootOnCompletion `\r\n                   -ErrorAction Stop `\r\n                   -WarningAction SilentlyContinue\r\nWrite-Verbose 'Rebooting'\r\n$global:DSCMachineStatus = 1",
+          "SetScript": "\r\nWrite-Verbose \"Creating forest [$DomainNetbiosName ($DomainName)]\"\r\nImport-Module ADDSDeployment -Verbose:$false\r\nInstall-ADDSForest -DomainName $DomainName `\r\n                   -DomainNetbiosName $DomainNetbiosName `\r\n                   -ForestMode 'Win2012' `\r\n                   -DomainMode 'Win2012' `\r\n                   -SafeModeAdministratorPassword (ConvertTo-SecureString $DSRMPassPhrase -AsPlainText -Force) `\r\n                   -InstallDns `\r\n                   -DatabasePath $DatabasePath `\r\n                   -LogPath $LogPath `\r\n                   -SysvolPath $SysvolPath `\r\n                   -Force `\r\n#                   -NoRebootOnCompletion `\r\n                   -ErrorAction Stop `\r\n                   -WarningAction SilentlyContinue\r\nWrite-Verbose 'Rebooting'\r\n$global:DSCMachineStatus = 1",
           "TestScript": "\r\n$d = Get-WmiObject Win32_NTDomain\r\nif ($d.Status -eq 'OK' -AND \r\n    $d.DnsForestName -eq $DomainName -AND \r\n    $d.DomainName -eq $DomainNetbiosName -AND \r\n    $d.DomainControllerName -eq \"\\\\$env:COMPUTERNAME\")\r\n{\r\n\tWrite-Verbose \"Domain [$DomainNetbiosName ($DomainName)] already configured.\"\r\n\treturn $true\r\n}\r\nreturn $false",
           "Type": "Script",
           "ImportModule": null,
@@ -377,7 +376,7 @@
         {
           "Credential": null,
           "GetScript": "return @{Domain = Get-WmiObject Win32_NTDomain}",
-          "SetScript": "\r\nWrite-Verbose \"Creating domain [$DomainNetbiosName ($DomainName)]\"\r\nImport-Module ADDSDeployment -Verbose:$false\r\n\r\n# Temporarily make the RootDC our DNS Server...\r\nSet-DnsClientServerAddress -InterfaceAlias 'Ethernet*' -ServerAddresses $DCRootIPAddress -Validate -ErrorAction Stop\r\n\r\nInstall-ADDSDomainController -DomainName $DomainName `\r\n                             -Credential (New-Object PsCredential($AdminUser, (ConvertTo-SecureString $AdminPass -AsPlainText -Force))) `\r\n                             -SafeModeAdministratorPassword (ConvertTo-SecureString $DSRMPassPhrase -AsPlainText -Force) `\r\n                             -InstallDns `\r\n                             -NoGlobalCatalog `\r\n                             -DatabasePath $DatabasePath `\r\n                             -LogPath $LogPath `\r\n                             -SysvolPath $SysvolPath `\r\n                             -Force `\r\n                             -NoRebootOnCompletion `\r\n                             -ErrorAction Stop `\r\n                             -WarningAction SilentlyContinue\r\n\r\n# Point the DNS server at this server...\r\nSet-DnsClientServerAddress -InterfaceAlias 'Ethernet*' -ServerAddresses '127.0.0.1' -Validate:$false\r\n\r\nWrite-Verbose 'Rebooting'\r\n$global:DSCMachineStatus = 1",
+          "SetScript": "\r\nWrite-Verbose \"Creating domain [$DomainNetbiosName ($DomainName)]\"\r\nImport-Module ADDSDeployment -Verbose:$false\r\n\r\n# Temporarily make the RootDC our DNS Server...\r\n#Set-DnsClientServerAddress -InterfaceAlias 'Ethernet*' -ServerAddresses $DCRootIPAddress -Validate -ErrorAction Stop\r\n\r\nInstall-ADDSDomainController -DomainName $DomainName `\r\n                             -Credential (New-Object PsCredential($AdminUser, (ConvertTo-SecureString $AdminPass -AsPlainText -Force))) `\r\n                             -SafeModeAdministratorPassword (ConvertTo-SecureString $DSRMPassPhrase -AsPlainText -Force) `\r\n                             -InstallDns `\r\n                             -NoGlobalCatalog `\r\n                             -DatabasePath $DatabasePath `\r\n                             -LogPath $LogPath `\r\n                             -SysvolPath $SysvolPath `\r\n                             -Force `\r\n#                             -NoRebootOnCompletion `\r\n                             -ErrorAction Stop `\r\n                             -WarningAction SilentlyContinue\r\n\r\n# Point the DNS server at this server...\r\n# Set-DnsClientServerAddress -InterfaceAlias 'Ethernet*' -ServerAddresses '127.0.0.1' -Validate:$false\r\n\r\nWrite-Verbose 'Rebooting'\r\n$global:DSCMachineStatus = 1",
           "TestScript": "\r\n$d = Get-WmiObject Win32_NTDomain\r\nif ($d.Status -eq 'OK' -AND \r\n    $d.DnsForestName -eq $DomainName -AND \r\n    $d.DomainName -eq $DomainNetbiosName -AND \r\n    $d.DomainControllerName -eq \"\\\\$env:COMPUTERNAME\")\r\n{\r\n\tWrite-Verbose \"Domain [$DomainNetbiosName ($DomainName)] already configured.\"\r\n\treturn $true\r\n}\r\nreturn $false",
           "Type": "Script",
           "ImportModule": null,
@@ -417,24 +416,6 @@
       ],
       "Args": {}
     },
-    {
-      "Name": "DnsDependantNode",
-      "Description": "Reboots any DNS dependant nodes with Network issues. Should include any non-DNS nodes created prior to the DNS Server be installed.",
-      "Resources": [
-        {
-          "Credential": null,
-          "GetScript": "Test-NetConnection -InformationLevel Detailed",
-          "SetScript": "\r\nif (!(Test-NetConnection -InformationLevel Quiet))\r\n{\r\n    if ((Get-ItemProperty -Path HKLM:\\SOFTWARE\\Aditi\\Brewmaster\\DnsDependantNode -ea Ignore).Rebooted)\r\n    {\r\n        Write-Warning 'Already rebooted once. Skipping this time.'\r\n        return\r\n    }\r\n\r\n    Write-Verbose 'Rebooting in order to resolve network issue.'\r\n    New-Item -Path HKLM:\\SOFTWARE\\Aditi\\Brewmaster -Force | Out-Null\r\n    Set-ItemProperty -Path HKLM:\\SOFTWARE\\Aditi\\Brewmaster\\DnsDependantNode -Name Rebooted -Value 1 -Type DWord\r\n    $global:DSCMachineStatus = 1\r\n}",
-          "TestScript": "Test-NetConnection -InformationLevel Quiet",
-          "Type": "Script",
-          "ImportModule": null,
-          "ImportTypeName": null,
-          "Name": "CheckNetwork",
-          "Args": {},
-          "Nodes": [],
-          "Requires": [],
-          "Description": "Reboot if network (DNS) not working. Assumes that rebooting the VM will fix the DNS."
-        }
       ],
       "Args": {}
     }
