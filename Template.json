@@ -91,7 +91,7 @@
       "AllowedDescription": "Must contain 3 to 14 letters, numbers, and hyphens. Must start with a letter."
     },
 	{
-      "Name": "AGGroup",
+      "Name": "AVSet",
       "Type": "String",
       "Default": "ad-avset",
       "Description": "Availability Group name.",
@@ -158,7 +158,7 @@
             "Subnets": [
               "ad-subnet"
             ],
-            "AvailabilitySet": "{{AGGroup}}",
+            "AvailabilitySet": "{{AVSet}}",
             "OsVirtualDisk": {
               "OsType": "Windows",
               "OsImageName": "a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-R2-*"
@@ -187,7 +187,7 @@
             "Subnets": [
               "ad-subnet"
             ],
-            "AvailabilitySet": "{{AGGroup}}",
+            "AvailabilitySet": "{{AVSet}}",
             "OsVirtualDisk": {
               "OsType": "Windows",
               "OsImageName": "a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-R2-*"
