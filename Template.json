@@ -261,14 +261,6 @@
         "SetupADNode",
         "SetupADDomainController"
       ]
-    },
-    {
-      "Name": "DomainNode",
-      "Description": "Domain node",
-      "Endpoints": [],
-      "ConfigurationIds": [
-        "DnsDependantNode"
-      ]
     }
   ],
   "Configurations": [
