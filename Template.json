@@ -208,7 +208,7 @@
             "ConfigSets": [
               "DomainController"
             ],
-			"DeploymentGroup": "default"
+			"DeploymentGroup": "DC"
           }
         ],
         "DnsServers": [
@@ -227,7 +227,7 @@
       "Description": "Must fully deploy root forest before adding additional DCs"
     },
 	{
-	  "Name": "default",
+	  "Name": "DC",
 	  "Description": "Alias for default group"
 	}
   ],
