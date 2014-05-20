@@ -179,7 +179,7 @@
             "ConfigSets": [
               "RootDomainController"
             ],
-            "DeploymentGroup": "AD"
+            "DeploymentGroup": "Forest"
           },
           {
             "Name": "{{ServerNamePrefix}}2",
@@ -222,9 +222,13 @@
     }
   ],
   "DeploymentGroups": [
+	{
+      "Name": "Forest",
+      "Description": "Must fully deploy forest root before any other DCs"
+    },
     {
       "Name": "AD",
-      "Description": "Must fully deploy root before any other AD dependent services"
+      "Description": "Additional DCs"
     }
   ],
   "Credentials": [
