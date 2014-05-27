@@ -94,7 +94,7 @@
       "Name": "AVSet",
       "Type": "String",
       "Default": "ad-avset",
-      "Description": "Availability Group name.",
+      "Description": "Availability Group name."
     }
   ],
   "Network": {
