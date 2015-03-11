@@ -158,6 +158,7 @@
             "Subnets": [
               "ad-subnet"
             ],
+			"StaticVNetIPAddress": "10.0.0.8",
             "AvailabilitySet": "{{AVSet}}",
             "OsVirtualDisk": {
               "OsType": "Windows",
@@ -187,6 +188,7 @@
             "Subnets": [
               "ad-subnet"
             ],
+			"StaticVNetIPAddress": "10.0.0.10",
             "AvailabilitySet": "{{AVSet}}",
             "OsVirtualDisk": {
               "OsType": "Windows",
