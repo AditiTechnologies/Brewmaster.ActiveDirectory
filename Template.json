@@ -390,7 +390,7 @@
             "DatabasePath": "F:\\NTDS",
             "LogPath": "F:\\NTDS",
             "SysvolPath": "F:\\SYSVOL",
-            "DCRootIPAddress": "10.0.0.4"
+            "DCRootIPAddress": "10.0.0.8"
           },
           "Nodes": [],
           "Requires": [],
